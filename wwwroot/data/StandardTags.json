@@ -1,18 +1,15 @@
 [
   {
-    "Color": "#F44336",
     "Name": "Youtube",
     "IconName": "YouTube",
     "Description": "Watching Youtube"
   },
   {
-    "Color": "#AB47BC",
     "Name": "Instagram",
     "IconName": "Instagram",
     "Description": "Doomscrolling"
   },
   {
-    "Color": "#E0E0E0",
     "Name": "Gaming",
     "IconName": "VideogameAsset",
     "Description": "Playing video games"

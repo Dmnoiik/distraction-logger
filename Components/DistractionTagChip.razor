@@ -1,0 +1,19 @@
+﻿
+<MudChip Text="@Tag.Name"
+Color="@ChipColor"
+Value="@Tag.IconName"
+Icon="@ChipIcon">
+    @Tag.Description
+</MudChip>
+
+@code {
+    [Parameter]
+    public DistractionTag Tag { get; set; }
+
+    [Parameter]
+    public Color ChipColor { get; set; }
+
+    [Parameter]
+    public string ChipIcon { get; set; }
+
+}

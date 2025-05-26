@@ -4,10 +4,17 @@
 
 @if (_tags is not null)
 {
-    <MudChipSet T="string" @bind-SelectedValue="@_tagValue" CheckMark SelectionMode="SelectionMode.SingleSelection">
+    <MudChipSet T="string" @bind-SelectedValue="@_tagValue" CheckMark SelectionMode="SelectionMode.ToggleSelection">
         @foreach (var tag in _tags)
         {
-            <MudChip Text="@tag.Name" Style="@TagsRepo.GetTagColor(tag)" Value="@tag.IconName"><MudIcon Icon="@TagsRepo.GetStandardIcon(tag.Name)"></MudIcon>@tag.Description</MudChip>
+            var color = TagsRepo.GetTagColor(tag.IconName);
+            var icon = TagsRepo.GetStandardIcon(tag.IconName);
+
+            <DistractionTagChip
+                ChipColor="@color"
+                ChipIcon="@icon"
+                Tag="tag"
+            ></DistractionTagChip>
         }
     </MudChipSet>
 }
@@ -16,7 +23,7 @@ else
     <MudText>Tags not loaded</MudText>
 }
 
-@if(_tagValue is not null)
+@if (_tagValue is not null)
 {
     <MudText>Selected value: @_tagValue</MudText>
 }

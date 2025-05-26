@@ -10,14 +10,21 @@ namespace Distraction_Logger_PWA.Data.Tags
     {
         private readonly HttpClient _httpClient;
 
-        private readonly Dictionary<string, string> _iconsForTags = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _iconsForTags = new Dictionary<string, string>
+        {
+            { "YouTube", Icons.Custom.Brands.YouTube},
+            { "Instagram", Icons.Custom.Brands.Instagram },
+            { "VideogameAsset", Icons.Material.Filled.VideogameAsset }
+        };
+        private readonly Dictionary<string, Color> _colorForTags = new Dictionary<string, Color>
+        {
+            { "YouTube", Color.Error},
+            { "Instagram", Color.Secondary},
+            { "VideogameAsset", Color.Tertiary }
+        };
 
         public DistractionTagRepository(HttpClient httpClient)
         {
-            _iconsForTags.Add("Youtube", Icons.Custom.Brands.YouTube);
-            _iconsForTags.Add("Instagram", Icons.Custom.Brands.Instagram);
-            _iconsForTags.Add("Gaming", Icons.Material.Filled.VideogameAsset);
-
             _httpClient = httpClient;
         }
 
@@ -37,17 +44,21 @@ namespace Distraction_Logger_PWA.Data.Tags
         public string GetStandardIcon(string iconName)
         {
             string output = string.Empty;
-            
-            if(!_iconsForTags.TryGetValue(iconName, out output))
+
+            if (!_iconsForTags.TryGetValue(iconName, out output))
             {
                 throw new ArgumentException($"Could not find {iconName}");
             }
             return output;
         }
 
-        public string GetTagColor(DistractionTag tag)
+        public Color GetTagColor(string iconName)
         {
-            return $"color: {tag.Color}";
+            if (iconName is null)
+            {
+                throw new ArgumentNullException($"Could not find color for {iconName}");
+            }
+            return _colorForTags[iconName];
         }
     }
 }
