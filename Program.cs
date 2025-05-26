@@ -1,4 +1,5 @@
 using Distraction_Logger_PWA;
+using Distraction_Logger_PWA.Data.Tags;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
@@ -8,6 +9,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+builder.Services.AddScoped<DistractionTagRepository>();
 builder.Services.AddMudServices();
 
 await builder.Build().RunAsync();

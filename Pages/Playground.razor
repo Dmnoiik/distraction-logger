@@ -1,7 +1,32 @@
 ﻿@page "/playground"
+@inject DistractionTagRepository TagsRepo
 
-<MudText Typo="Typo.h1">TEXT</MudText>
+
+@if (_tags is not null)
+{
+    <MudChipSet T="string" @bind-SelectedValue="@_tagValue" CheckMark SelectionMode="SelectionMode.SingleSelection">
+        @foreach (var tag in _tags)
+        {
+            <MudChip Text="@tag.Name" Style="@TagsRepo.GetTagColor(tag)" Value="@tag.IconName"><MudIcon Icon="@TagsRepo.GetStandardIcon(tag.Name)"></MudIcon>@tag.Description</MudChip>
+        }
+    </MudChipSet>
+}
+else
+{
+    <MudText>Tags not loaded</MudText>
+}
+
+@if(_tagValue is not null)
+{
+    <MudText>Selected value: @_tagValue</MudText>
+}
 
 @code {
+    private List<DistractionTag>? _tags;
+    private string _tagValue;
 
+    protected override async Task OnInitializedAsync()
+    {
+        _tags = await TagsRepo.GetStandardTagsAsync();
+    }
 }
