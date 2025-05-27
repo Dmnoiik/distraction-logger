@@ -1,39 +1,5 @@
 ﻿@page "/playground"
-@inject DistractionTagRepository TagsRepo
-
-
-@if (_tags is not null)
-{
-    <MudChipSet T="string" @bind-SelectedValue="@_tagValue" CheckMark SelectionMode="SelectionMode.ToggleSelection">
-        @foreach (var tag in _tags)
-        {
-            var color = TagsRepo.GetTagColor(tag.IconName);
-            var icon = TagsRepo.GetStandardIcon(tag.IconName);
-
-            <DistractionTagChip
-                ChipColor="@color"
-                ChipIcon="@icon"
-                Tag="tag"
-            ></DistractionTagChip>
-        }
-    </MudChipSet>
-}
-else
-{
-    <MudText>Tags not loaded</MudText>
-}
-
-@if (_tagValue is not null)
-{
-    <MudText>Selected value: @_tagValue</MudText>
-}
+<MudText>Playground</MudText>
 
 @code {
-    private List<DistractionTag>? _tags;
-    private string _tagValue;
-
-    protected override async Task OnInitializedAsync()
-    {
-        _tags = await TagsRepo.GetStandardTagsAsync();
-    }
 }

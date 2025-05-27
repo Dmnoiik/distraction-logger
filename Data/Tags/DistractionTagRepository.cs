@@ -14,13 +14,19 @@ namespace Distraction_Logger_PWA.Data.Tags
         {
             { "YouTube", Icons.Custom.Brands.YouTube},
             { "Instagram", Icons.Custom.Brands.Instagram },
-            { "VideogameAsset", Icons.Material.Filled.VideogameAsset }
+            { "VideogameAsset", Icons.Material.Filled.VideogameAsset },
+            { "PhoneAndroid", Icons.Material.Filled.PhoneAndroid },
+            { "Web", Icons.Material.Filled.Web },
+            { "MusicNote", Icons.Material.Filled.MusicNote }
         };
         private readonly Dictionary<string, Color> _colorForTags = new Dictionary<string, Color>
         {
-            { "YouTube", Color.Error},
-            { "Instagram", Color.Secondary},
-            { "VideogameAsset", Color.Tertiary }
+            { "Error", Color.Error},
+            { "Secondary", Color.Secondary},
+            { "Tertiary", Color.Tertiary },
+            { "Info", Color.Info },
+            { "Success", Color.Success},
+            { "Warning", Color.Warning }
         };
 
         public DistractionTagRepository(HttpClient httpClient)
@@ -41,24 +47,24 @@ namespace Distraction_Logger_PWA.Data.Tags
             return tags;
         }
 
-        public string GetStandardIcon(string iconName)
+        public string GetTagIcon(string iconKey)
         {
             string output = string.Empty;
 
-            if (!_iconsForTags.TryGetValue(iconName, out output))
+            if (!_iconsForTags.TryGetValue(iconKey, out output))
             {
-                throw new ArgumentException($"Could not find {iconName}");
+                throw new ArgumentException($"Could not find {iconKey}");
             }
             return output;
         }
 
-        public Color GetTagColor(string iconName)
+        public Color GetTagColor(string colorKey)
         {
-            if (iconName is null)
+            if (colorKey is null)
             {
-                throw new ArgumentNullException($"Could not find color for {iconName}");
+                throw new ArgumentNullException($"Could not find color for {colorKey}");
             }
-            return _colorForTags[iconName];
+            return _colorForTags[colorKey];
         }
     }
 }

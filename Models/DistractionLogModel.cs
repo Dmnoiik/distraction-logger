@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Distraction_Logger_PWA.Models
 {
-    public class DistractionLog
+    public class DistractionLogModel
     {
         [Required]
         public int ID { get; set; }
@@ -11,6 +11,10 @@ namespace Distraction_Logger_PWA.Models
         [Required]
         public List<DistractionTag> Tags { get; set; }
 
+        public string Notes { get; set; }
+
+        [Required]
+        DateTime Date { get; set; }
     }
 }
 

@@ -1,4 +1,6 @@
-﻿<MudCard>
+﻿@inject DistractionTagRepository TagsRepo
+
+<MudCard>
     <MudCardHeader>
         <CardHeaderContent>
             <MudText>This is header</MudText>
@@ -6,16 +8,36 @@
     </MudCardHeader>
     <MudCardContent>
         <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.Center">
-            <MudText>This is content</MudText>
-            <MudText>This is content 2</MudText>
-            <MudText>This is content 3</MudText>
+            @if (_tags is not null)
+            {
+                <MudChipSet T="DistractionTag" @bind-SelectedValues="_selectedTags" SelectionMode="SelectionMode.MultiSelection">
+                    @foreach (var tag in _tags)
+                    {
+                        var color = TagsRepo.GetTagColor(tag.ColorKey);
+                        var icon = TagsRepo.GetTagIcon(tag.IconKey);
+
+                        <DistractionTagChip ChipColor="@color"
+                        ChipIcon="@icon"
+                        Tag="@tag">
+                        </DistractionTagChip>
+                    }
+                </MudChipSet>
+            }
         </MudStack>
+        <MudTextField @bind-Value="_textValue" Label="Notes" Variant="Variant.Text"></MudTextField>
     </MudCardContent>
     <MudCardActions>
-        <MudButton>Button in actions</MudButton>
+        <MudButton ButtonType="ButtonType.Submit">Button in actions</MudButton>
     </MudCardActions>
 </MudCard>
 
 @code {
+    private List<DistractionTag>? _tags;
+    private IReadOnlyCollection<DistractionTag>? _selectedTags;
+    private string? _textValue;
 
+    protected override async Task OnInitializedAsync()
+    {
+        _tags = await TagsRepo.GetStandardTagsAsync();
+    }
 }

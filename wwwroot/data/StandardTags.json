@@ -1,17 +1,38 @@
 [
   {
     "Name": "Youtube",
-    "IconName": "YouTube",
-    "Description": "Watching Youtube"
+    "IconKey": "YouTube",
+    "Description": "Watching Youtube",
+    "ColorKey": "Error"
   },
   {
     "Name": "Instagram",
-    "IconName": "Instagram",
-    "Description": "Doomscrolling"
+    "IconKey": "Instagram",
+    "Description": "Doomscrolling",
+    "ColorKey": "Secondary"
   },
   {
     "Name": "Gaming",
-    "IconName": "VideogameAsset",
-    "Description": "Playing video games"
+    "IconKey": "VideogameAsset",
+    "Description": "Playing video games",
+    "ColorKey": "Tertiary"
+  },
+  {
+    "Name": "Phone",
+    "IconKey": "PhoneAndroid",
+    "Description": "Using phone",
+    "ColorKey": "Info"
+  },
+  {
+    "Name": "Web",
+    "IconKey": "Web",
+    "Description": "Scrolling web",
+    "ColorKey": "Success"
+  },
+  {
+    "Name": "Noise",
+    "IconKey": "MusicNote",
+    "Description": "Noise in background",
+    "ColorKey": "Warning"
   }
 ]
