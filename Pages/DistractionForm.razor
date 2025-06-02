@@ -1,5 +1,6 @@
 ﻿@inject DistractionTagRepository TagsRepo
-@inject IDialogService DialogService
+@inject IMagicIndexedDb _MagicDb
+@inject NavigationManager _Navigator
 
 <MudContainer MaxWidth="MaxWidth.ExtraSmall">
     <MudCard Square>
@@ -19,8 +20,8 @@
                         var icon = TagsRepo.GetTagIcon(tag.IconKey);
 
                         <DistractionTagChip ChipColor="@color"
-                                            ChipIcon="@icon"
-                                            Tag="@tag">
+                        ChipIcon="@icon"
+                        Tag="@tag">
                         </DistractionTagChip>
                     }
                 </MudChipSet>
@@ -38,20 +39,29 @@
     private IReadOnlyCollection<DistractionTag>? _selectedTags;
     private string? _textValue;
     private DistractionLogModel _model = new DistractionLogModel();
+    private IMagicQuery<DistractionLogModel> _logQuery;
 
     protected override async Task OnInitializedAsync()
     {
         _tags = await TagsRepo.GetStandardTagsAsync();
+        _logQuery = await _MagicDb.Query<DistractionLogModel>();
     }
 
     async Task SubmitLog()
     {
         DateTime currentDate = DateTime.Now;
-
-        _model.Date = currentDate;
-        _model.TagsKeys = _selectedTags.Select(t => t.IconKey).ToList();
-        _model.Notes = _textValue;
-        Console.WriteLine($"CREATED MODEL: Date: {_model.Date}, Tags: {string.Join(",", _model.TagsKeys)}, Notes: {_model.Notes}");
+        if(_selectedTags is null || _selectedTags.Count <= 0)
+        {
+            Console.WriteLine("Couldn't add model");
+        }
+        else
+        {
+            _model.Date = currentDate;
+            _model.TagsKeys = _selectedTags.Select(t => t.IconKey).ToList();
+            _model.Notes = _textValue;
+            await _logQuery.AddAsync(_model);
+            _Navigator.NavigateTo("/playground");
+        }
 
     }
 }

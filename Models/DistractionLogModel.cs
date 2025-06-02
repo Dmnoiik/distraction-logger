@@ -8,19 +8,19 @@ namespace Distraction_Logger_PWA.Models
 {
     public class DistractionLogModel : MagicTableTool<DistractionLogModel>, IMagicTable<DbSets>
     {
-        public static readonly IndexedDbSet DistractionLoggerDb = IndexedDbContext.DistractionLoggerDb;
-
         public IMagicCompoundKey GetKeys() =>
             CreatePrimaryKey(x => x.ID, true);
 
         public string GetTableName() => "DistractionLog";
+
         public IndexedDbSet GetDefaultDatabase() => IndexedDbContext.DistractionLoggerDb;
-        public DbSets Databases { get; } = new();
-        public sealed class DbSets
+
+        public List<IMagicCompoundIndex>? GetCompoundIndexes()
         {
-            public readonly IndexedDbSet DistractionLoggerDb = IndexedDbContext.DistractionLoggerDb;
+            return null;
         }
 
+        DbSets IMagicTable<DbSets>.Databases => new DbSets();
 
         [Required]
         public long ID { get; set; }
@@ -33,6 +33,12 @@ namespace Distraction_Logger_PWA.Models
         [MagicIndex]
         [Required]
         public DateTime Date { get; set; }
+    }
+
+
+    public sealed class DbSets
+    {
+        public readonly IndexedDbSet DistractionLoggerDb = IndexedDbContext.DistractionLoggerDb;
     }
 }
 
