@@ -1,4 +1,5 @@
 ﻿@inject DistractionTagRepository TagsRepo
+@inject IDialogService DialogService
 
 <MudContainer MaxWidth="MaxWidth.ExtraSmall">
     <MudCard Square>
@@ -8,29 +9,26 @@
             </CardHeaderContent>
         </MudCardHeader>
         <MudCardContent>
-            <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center">
-                <MudText Typo="Typo.caption" Color="Color.Secondary">Select one or more distractions below.</MudText>
-                @if (_tags is not null)
-                {
-                    <MudChipSet T="DistractionTag" @bind-SelectedValues="_selectedTags" CheckMark SelectionMode="SelectionMode.MultiSelection">
-                        @foreach (var tag in _tags)
-                        {
-                            var color = TagsRepo.GetTagColor(tag.ColorKey);
-                            var icon = TagsRepo.GetTagIcon(tag.IconKey);
+            <MudText Typo="Typo.caption" Color="Color.Secondary">Select one or more distractions below.</MudText>
+            @if (_tags is not null)
+            {
+                <MudChipSet T="DistractionTag" @bind-SelectedValues="_selectedTags" CheckMark SelectionMode="SelectionMode.MultiSelection">
+                    @foreach (var tag in _tags)
+                    {
+                        var color = TagsRepo.GetTagColor(tag.ColorKey);
+                        var icon = TagsRepo.GetTagIcon(tag.IconKey);
 
-                            <DistractionTagChip ChipColor="@color"
-                                                ChipIcon="@icon"
-                                                Tag="@tag">
-                            </DistractionTagChip>
-                        }
-                    </MudChipSet>
-                }
-            </MudStack>
-
+                        <DistractionTagChip ChipColor="@color"
+                                            ChipIcon="@icon"
+                                            Tag="@tag">
+                        </DistractionTagChip>
+                    }
+                </MudChipSet>
+            }
             <MudTextField Placeholder="e.g., Watched 3 videos before realizing it." @bind-Value="_textValue" Label="Want to write more?" Variant="Variant.Text"></MudTextField>
         </MudCardContent>
         <MudCardActions>
-            <MudButton ButtonType="ButtonType.Submit">Save distraction</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" OnClick="SubmitLog">Save distraction</MudButton>
         </MudCardActions>
     </MudCard>
 </MudContainer>
@@ -39,9 +37,21 @@
     private List<DistractionTag>? _tags;
     private IReadOnlyCollection<DistractionTag>? _selectedTags;
     private string? _textValue;
+    private DistractionLogModel _model = new DistractionLogModel();
 
     protected override async Task OnInitializedAsync()
     {
         _tags = await TagsRepo.GetStandardTagsAsync();
+    }
+
+    async Task SubmitLog()
+    {
+        DateTime currentDate = DateTime.Now;
+
+        _model.Date = currentDate;
+        _model.TagsKeys = _selectedTags.Select(t => t.IconKey).ToList();
+        _model.Notes = _textValue;
+        Console.WriteLine($"CREATED MODEL: Date: {_model.Date}, Tags: {string.Join(",", _model.TagsKeys)}, Notes: {_model.Notes}");
+
     }
 }
