@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using MudBlazor;
+using Distraction_Logger_PWA.ViewModels;
 
 namespace Distraction_Logger_PWA.Data.Tags
 {
@@ -28,6 +29,7 @@ namespace Distraction_Logger_PWA.Data.Tags
             { "Success", Color.Success},
             { "Warning", Color.Warning }
         };
+        private List<DistractionTag>? _standardTags;
 
         public DistractionTagRepository(HttpClient httpClient)
         {
@@ -37,14 +39,19 @@ namespace Distraction_Logger_PWA.Data.Tags
 
         public async Task<List<DistractionTag>> GetStandardTagsAsync()
         {
-            var tags = await _httpClient.GetFromJsonAsync<List<DistractionTag>>("data/StandardTags.json");
+            if(_standardTags is not null)
+            {
+                return _standardTags;
+            }
 
-            if (tags is null)
+            _standardTags = await _httpClient.GetFromJsonAsync<List<DistractionTag>>("data/StandardTags.json");
+
+            if (_standardTags is null)
             {
                 throw new Exception("Could not read StandardTags json file");
             }
 
-            return tags;
+            return _standardTags;
         }
 
         public string GetTagIcon(string iconKey)
@@ -83,6 +90,18 @@ namespace Distraction_Logger_PWA.Data.Tags
             var tags = await _httpClient.GetFromJsonAsync<List<DistractionTag>>("data/StandardTags.json");
             var output = tags.FirstOrDefault(x => x.IconKey == iconKey);
             return output;
+        }
+
+        public DistractionTagViewModel GetTagViewModel(string iconKey)
+        {
+            var tagIcon = _iconsForTags[iconKey];
+            var colorIcon = _colorForTags[iconKey];
+
+            return new DistractionTagViewModel
+            {
+                Icon = tagIcon,
+                Color = colorIcon,
+            };
         }
     }
 }
