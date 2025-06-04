@@ -74,28 +74,32 @@ namespace Distraction_Logger_PWA.Data.Tags
             return _colorForTags[colorKey];
         }
 
-        public async Task<List<DistractionTag>> GetTagsAsync(List<string> iconKeys)
-        {
-            List<DistractionTag> tags = new List<DistractionTag>();
-            foreach(string iconKey in iconKeys)
-            {
-                var currentTag = await GetTag(iconKey);
-                tags.Add(currentTag);
-            }
-            return tags;
-        }
+        //public async Task<List<DistractionTag>> GetTagsAsync(List<string> iconKeys)
+        //{
+        //    List<DistractionTag> tags = new List<DistractionTag>();
+        //    foreach(string iconKey in iconKeys)
+        //    {
+        //        var currentTag = await GetTag(iconKey);
+        //        tags.Add(currentTag);
+        //    }
+        //    return tags;
+        //}
 
-        public async Task<DistractionTag> GetTag(string iconKey)
+        public DistractionTag GetTag(string iconKey)
         {
-            var tags = await _httpClient.GetFromJsonAsync<List<DistractionTag>>("data/StandardTags.json");
-            var output = tags.FirstOrDefault(x => x.IconKey == iconKey);
+            DistractionTag output = _standardTags?.FirstOrDefault(x => x.IconKey == iconKey);
+            if (output == null)
+            {
+                throw new Exception("Couldn't find tag");
+            }
             return output;
         }
 
         public DistractionTagViewModel GetTagViewModel(string iconKey)
         {
-            var tagIcon = _iconsForTags[iconKey];
-            var colorIcon = _colorForTags[iconKey];
+            DistractionTag tag = GetTag(iconKey);
+            string tagIcon = _iconsForTags.GetValueOrDefault(tag.IconKey);
+            Color colorIcon = _colorForTags.GetValueOrDefault(tag.ColorKey);
 
             return new DistractionTagViewModel
             {

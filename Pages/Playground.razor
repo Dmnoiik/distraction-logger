@@ -19,9 +19,8 @@
                 <MudChipSet T="DistractionTag" ReadOnly>
                     @foreach (var tagKey in model.TagsKeys)
                     {
-                        DistractionTag tagModel = await TagsRepo.GetTag(tagKey);
-                        <MudChip Value="@tag">
-
+                        DistractionTagViewModel chipView = TagsRepo.GetTagViewModel(tagKey);
+                        <MudChip Color="@chipView.Color" Icon="@chipView.Icon">
                         </MudChip>
                     }
                 </MudChipSet>
