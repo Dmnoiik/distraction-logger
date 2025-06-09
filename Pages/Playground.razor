@@ -1,5 +1,5 @@
 ﻿@page "/playground"
-@inject IMagicIndexedDb _MagicDb
+@inject DistractionLogRepository LogsRepo
 @inject DistractionTagRepository TagsRepo
 @inject NavigationManager _Navigator
 
@@ -39,8 +39,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _logQuery = await _MagicDb.Query<DistractionLogModel>();
-        _models = await _logQuery.ToListAsync();
+        _models = await LogsRepo.GetAllLogsAsync();
     }
 
     private async Task DeleteLog(DistractionLogModel modelToDelete)

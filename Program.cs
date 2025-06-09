@@ -1,4 +1,5 @@
 using Distraction_Logger_PWA;
+using Distraction_Logger_PWA.Data.Logs;
 using Distraction_Logger_PWA.Data.Tags;
 using Magic.IndexedDb;
 using Microsoft.AspNetCore.Components.Web;
@@ -11,6 +12,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<DistractionTagRepository>();
+builder.Services.AddScoped<DistractionLogRepository>();
 builder.Services.AddMudServices();
 builder.Services.AddMagicBlazorDB(BlazorInteropMode.WASM, builder.HostEnvironment.IsDevelopment());
 

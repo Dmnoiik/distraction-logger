@@ -1,6 +1,20 @@
 ﻿@page "/today"
+@inject IMagicIndexedDb _MagicDb
+@inject DistractionTagRepository TagsRepo
+<MudContainer MaxWidth="MaxWidth.Medium">
+<MudText Align="Align.Center" Typo="Typo.h2">@_todayDate.ToString("dd.MM.yyyy")</MudText>
+</MudContainer>
 <h3>TodayLogs</h3>
 
 @code {
+    private IMagicQuery<DistractionLogModel>? _logQuery;
+    private List<DistractionLogModel>? _models;
+    private DateTime _todayDate;
 
+    protected override async Task OnInitializedAsync()
+    {
+        _todayDate = DateTime.Now.Date;
+        _logQuery = await _MagicDb.Query<DistractionLogModel>();
+        _models = await _logQuery.Where(log => log.Date.Date == DateTime.Now.Date).ToListAsync();
+    }
 }

@@ -20,8 +20,8 @@
                         var icon = TagsRepo.GetTagIcon(tag.IconKey);
 
                         <DistractionTagChip ChipColor="@color"
-                        ChipIcon="@icon"
-                        Tag="@tag">
+                                            ChipIcon="@icon"
+                                            Tag="@tag">
                         </DistractionTagChip>
                     }
                 </MudChipSet>
@@ -29,7 +29,7 @@
             <MudTextField Class="mt-3" Placeholder="e.g., Watched 3 videos before realizing it." @bind-Value="_textValue" Label="Additional notes" Variant="Variant.Text"></MudTextField>
         </MudCardContent>
         <MudCardActions>
-            <MudButton Class="ml-auto" Variant="Variant.Filled" Color="Color.Primary" Disabled="@(_selectedTags is null || _selectedTags.Count == 0 ? true : false)"ButtonType="ButtonType.Submit" OnClick="SubmitLog">Save distraction</MudButton>
+            <MudButton Class="ml-auto" Variant="Variant.Filled" Color="Color.Primary" Disabled="@(_selectedTags is null || _selectedTags.Count == 0 ? true : false)" ButtonType="ButtonType.Submit" OnClick="SubmitLog">Save distraction</MudButton>
         </MudCardActions>
     </MudCard>
 </MudContainer>
@@ -50,10 +50,10 @@
     async Task SubmitLog()
     {
         DateTime currentDate = DateTime.Now;
-            _model.Date = currentDate;
-            _model.TagsKeys = _selectedTags.Select(t => t.IconKey).ToList();
-            _model.Notes = _textValue;
-            await _logQuery.AddAsync(_model);
-            _Navigator.NavigateTo("/playground");
+        _model.Date = currentDate;
+        _model.TagsKeys = _selectedTags.Select(t => t.IconKey).ToList();
+        _model.Notes = _textValue;
+        await _logQuery.AddAsync(_model);
+        _Navigator.NavigateTo("/today");
     }
 }
