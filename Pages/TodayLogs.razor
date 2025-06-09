@@ -1,20 +1,33 @@
 ﻿@page "/today"
-@inject IMagicIndexedDb _MagicDb
+@inject DistractionLogRepository LogsRepo
 @inject DistractionTagRepository TagsRepo
-<MudContainer MaxWidth="MaxWidth.Medium">
 <MudText Align="Align.Center" Typo="Typo.h2">@_todayDate.ToString("dd.MM.yyyy")</MudText>
+<MudContainer MaxWidth="MaxWidth.Medium">
+    @if(_models is not null)
+    {
+        @foreach(var model in _models)
+        {
+            <MudText>@model.Notes</MudText>
+        }
+    }
+
 </MudContainer>
 <h3>TodayLogs</h3>
 
 @code {
-    private IMagicQuery<DistractionLogModel>? _logQuery;
-    private List<DistractionLogModel>? _models;
+    private List<DistractionLogModel> _models;
     private DateTime _todayDate;
 
     protected override async Task OnInitializedAsync()
     {
         _todayDate = DateTime.Now.Date;
-        _logQuery = await _MagicDb.Query<DistractionLogModel>();
-        _models = await _logQuery.Where(log => log.Date.Date == DateTime.Now.Date).ToListAsync();
+        _models = await LogsRepo.GetTodayLogsAsync();
+    }
+
+    private async Task DeleteLog(DistractionLogModel modelToDelete)
+    {
+        await LogsRepo.DeleteLogAsync(modelToDelete);
+        _models.Remove(modelToDelete);
+        StateHasChanged();
     }
 }

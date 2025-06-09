@@ -1,7 +1,8 @@
 ﻿using Distraction_Logger_PWA.Models;
 using Magic.IndexedDb;
+using System.Threading.Tasks;
 
-namespace Distraction_Logger_PWA.Data.Logs
+namespace Distraction_Logger_PWA.Data.LogsData
 {
     public class DistractionLogRepository
     {
@@ -14,12 +15,38 @@ namespace Distraction_Logger_PWA.Data.Logs
 
         public async Task<List<DistractionLogModel>> GetAllLogsAsync()
         {
-            var result = await _db.Query<DistractionLogModel>();
-            if (result is null)
+            var query = await GetQueryAsync();
+            return await query.ToListAsync();
+        }
+
+        public async Task SaveLogAsync(DistractionLogModel model)
+        {
+            var query = await GetQueryAsync();
+            await query.AddAsync(model);
+        }
+
+        public async Task<List<DistractionLogModel>> GetTodayLogsAsync()
+        {
+            DateTime dateToday = DateTime.Now.Date;
+            var query = await GetQueryAsync();
+            var allLogs = await query.Where(log => log.Date.Date == dateToday).ToListAsync();
+            return allLogs;
+        }
+
+        public async Task DeleteLogAsync(DistractionLogModel model)
+        {
+            var query = await GetQueryAsync();
+            await query.DeleteAsync(model);
+        }
+
+        private async ValueTask<IMagicQuery<DistractionLogModel>> GetQueryAsync()
+        {
+            var query = await _db.Query<DistractionLogModel>();
+            if (query is null)
             {
                 throw new Exception("Couldn't read database");
             }
-            return await result.ToListAsync();
+            return query;
         }
 
     }

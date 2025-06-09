@@ -1,5 +1,5 @@
 using Distraction_Logger_PWA;
-using Distraction_Logger_PWA.Data.Logs;
+using Distraction_Logger_PWA.Data.LogsData;
 using Distraction_Logger_PWA.Data.Tags;
 using Magic.IndexedDb;
 using Microsoft.AspNetCore.Components.Web;
