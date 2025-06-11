@@ -29,28 +29,31 @@ namespace Distraction_Logger_PWA.Data.Tags
             { "Success", Color.Success},
             { "Warning", Color.Warning }
         };
+
         private List<DistractionTag>? _standardTags;
+        private readonly string tagsJsonURI = "data/StandardTags.json";
 
         public DistractionTagRepository(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
 
+        public async Task EnsureTagsLoaded()
+        {
+            if (_standardTags is null)
+            {
+                List<DistractionTag> tagsJson = await _httpClient.GetFromJsonAsync<List<DistractionTag>>(tagsJsonURI);
+                if (tagsJson is null)
+                {
+                    throw new Exception("Couldn't load standard tags");
+                }
+                _standardTags = tagsJson;
+            }
+        }
 
         public async Task<List<DistractionTag>> GetStandardTagsAsync()
         {
-            if(_standardTags is not null)
-            {
-                return _standardTags;
-            }
-
-            _standardTags = await _httpClient.GetFromJsonAsync<List<DistractionTag>>("data/StandardTags.json");
-
-            if (_standardTags is null)
-            {
-                throw new Exception("Could not read StandardTags json file");
-            }
-
+            await EnsureTagsLoaded();
             return _standardTags;
         }
 
@@ -60,7 +63,7 @@ namespace Distraction_Logger_PWA.Data.Tags
 
             if (!_iconsForTags.TryGetValue(iconKey, out output))
             {
-                throw new ArgumentException($"Could not find {iconKey}");
+                throw new ArgumentException($"Could not find icon for {iconKey}");
             }
             return output;
         }
@@ -74,38 +77,14 @@ namespace Distraction_Logger_PWA.Data.Tags
             return _colorForTags[colorKey];
         }
 
-        //public async Task<List<DistractionTag>> GetTagsAsync(List<string> iconKeys)
-        //{
-        //    List<DistractionTag> tags = new List<DistractionTag>();
-        //    foreach(string iconKey in iconKeys)
-        //    {
-        //        var currentTag = await GetTag(iconKey);
-        //        tags.Add(currentTag);
-        //    }
-        //    return tags;
-        //}
-
-        public DistractionTag GetTag(string iconKey)
+        public async Task<DistractionTag> GetTagModel(string iconKey)
         {
             DistractionTag output = _standardTags?.FirstOrDefault(x => x.IconKey == iconKey);
             if (output == null)
             {
-                throw new Exception("Couldn't find tag");
+                throw new Exception($"Couldn't find tag for icon '{iconKey}'");
             }
             return output;
-        }
-
-        public DistractionTagViewModel GetTagViewModel(string iconKey)
-        {
-            DistractionTag tag = GetTag(iconKey);
-            string tagIcon = _iconsForTags.GetValueOrDefault(tag.IconKey);
-            Color colorIcon = _colorForTags.GetValueOrDefault(tag.ColorKey);
-
-            return new DistractionTagViewModel
-            {
-                Icon = tagIcon,
-                Color = colorIcon,
-            };
         }
     }
 }

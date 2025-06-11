@@ -1,13 +1,22 @@
 ﻿@page "/today"
 @inject DistractionLogRepository LogsRepo
 @inject DistractionTagRepository TagsRepo
+@inject DistractionLogMapper LogsMapper
+@inject DistractionTagMapper TagsMapper
+
+
 <MudText Align="Align.Center" Typo="Typo.h2">@_todayDate.ToString("dd.MM.yyyy")</MudText>
 <MudContainer MaxWidth="MaxWidth.Medium">
     @if(_models is not null)
     {
-        @foreach(var model in _models)
+        @foreach(var viewModel in _logViewModels)
         {
-            <MudText>@model.Notes</MudText>
+            <MudText>TIME: @viewModel.TimeOfCreation</MudText>
+            <MudText>NOTES: @viewModel.Notes</MudText>
+            @foreach(var tag in viewModel.Tags)
+            {
+                <DistractionTagChip ChipColor="@tag.Color", ChipIcon="@tag.Icon"></DistractionTagChip>
+            }
         }
     }
 
@@ -16,6 +25,7 @@
 
 @code {
     private List<DistractionLogModel> _models;
+    private List<DistractionLogViewModel> _logViewModels;
     private DateTime _todayDate;
 
     protected override async Task OnInitializedAsync()

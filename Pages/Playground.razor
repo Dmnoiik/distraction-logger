@@ -18,12 +18,6 @@
             </MudCardHeader>
             <MudCardContent>
                 <MudChipSet T="DistractionTag" ReadOnly>
-                    @foreach (var tagKey in model.TagsKeys)
-                    {
-                        DistractionTagViewModel chipView = TagsRepo.GetTagViewModel(tagKey);
-                        <MudChip Color="@chipView.Color" Icon="@chipView.Icon">
-                        </MudChip>
-                    }
                 </MudChipSet>
                 <MudText>@model.Notes</MudText>
             </MudCardContent>

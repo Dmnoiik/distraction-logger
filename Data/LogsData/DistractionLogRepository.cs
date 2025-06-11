@@ -1,4 +1,6 @@
-﻿using Distraction_Logger_PWA.Models;
+﻿using Distraction_Logger_PWA.Data.Tags;
+using Distraction_Logger_PWA.Models;
+using Distraction_Logger_PWA.ViewModels;
 using Magic.IndexedDb;
 using System.Threading.Tasks;
 
