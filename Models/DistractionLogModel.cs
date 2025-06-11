@@ -1,5 +1,4 @@
-﻿using Distraction_Logger_PWA.Data.Tags;
-using Distraction_Logger_PWA.DB;
+﻿using Distraction_Logger_PWA.DB;
 using Magic.IndexedDb;
 using Magic.IndexedDb.SchemaAnnotations;
 using System.ComponentModel.DataAnnotations;

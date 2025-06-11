@@ -15,6 +15,17 @@ namespace Distraction_Logger_PWA.Data.LogsData
             _db = db;
         }
 
+        public async Task<DistractionLogModel> GetLogByIdAsync(long id)
+        {
+            var query = await GetQueryAsync();
+            var modelToQuery = await query.FirstOrDefaultAsync(model => model.ID == id);
+            if (modelToQuery is null)
+            {
+                throw new Exception($"Couldn't not find model with id: {id}");
+            }
+            return modelToQuery;
+        }
+
         public async Task<List<DistractionLogModel>> GetAllLogsAsync()
         {
             var query = await GetQueryAsync();

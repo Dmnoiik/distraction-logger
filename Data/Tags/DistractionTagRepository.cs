@@ -79,6 +79,7 @@ namespace Distraction_Logger_PWA.Data.Tags
 
         public async Task<DistractionTag> GetTagModel(string iconKey)
         {
+            await EnsureTagsLoaded();
             DistractionTag output = _standardTags?.FirstOrDefault(x => x.IconKey == iconKey);
             if (output == null)
             {

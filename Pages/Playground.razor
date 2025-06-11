@@ -1,46 +1,27 @@
 ﻿@page "/playground"
-@using Distraction_Logger_PWA.Data.LogsData
 @inject DistractionLogRepository LogsRepo
 @inject DistractionTagRepository TagsRepo
-@inject NavigationManager _Navigator
+@inject DistractionLogMapper LogsMapper
+@inject DistractionTagMapper TagsMapper
 
-<MudText>Playground</MudText>
+<MudText>PLAYGROUND!!!!</MudText>
 
-@if (_models is not null)
+@if(_logModel is not null)
 {
-    @foreach (var model in _models)
-    {
-        <MudCard Square>
-            <MudCardHeader>
-                <CardHeaderContent>
-                    <MudText Align="Align.Center" Typo="Typo.h5" GutterBottom>@model.Date.ToString()</MudText>
-                </CardHeaderContent>
-            </MudCardHeader>
-            <MudCardContent>
-                <MudChipSet T="DistractionTag" ReadOnly>
-                </MudChipSet>
-                <MudText>@model.Notes</MudText>
-            </MudCardContent>
-            <MudCardActions>
-                <MudButton ButtonType="ButtonType.Submit" OnClick="(() => DeleteLog(model))" Variant="Variant.Filled">Delete distraction</MudButton>
-            </MudCardActions>
-        </MudCard>
-    }
+    <MudText>THIS IS VIEW MODEL: @_logViewModel.Notes</MudText>
+    <MudText>THIS IS TIME: @_logViewModel.TimeOfCreation</MudText>
 }
 
+
 @code {
-    private IMagicQuery<DistractionLogModel>? _logQuery;
-    private List<DistractionLogModel>? _models;
+    private DateTime _todayDate;
+    private DistractionLogModel _logModel;
+    private DistractionLogViewModel _logViewModel;
 
     protected override async Task OnInitializedAsync()
     {
-        _models = await LogsRepo.GetAllLogsAsync();
-    }
-
-    private async Task DeleteLog(DistractionLogModel modelToDelete)
-    {
-        await _logQuery.DeleteAsync(modelToDelete);
-        _models.Remove(modelToDelete);
-        StateHasChanged();
+        _todayDate = DateTime.Now.Date;
+        _logModel = await LogsRepo.GetLogByIdAsync(26);
+        _logViewModel = await LogsMapper.MapToViewModel(_logModel);
     }
 }

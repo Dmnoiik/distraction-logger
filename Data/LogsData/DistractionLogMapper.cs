@@ -13,16 +13,16 @@ namespace Distraction_Logger_PWA.Data.LogsData
             _tagsMapper = tagsMapper;
         }
 
-        public async Task<DistractionLogViewModel> GetViewModel(DistractionLogModel model)
+        public async Task<DistractionLogViewModel> MapToViewModel(DistractionLogModel model)
         {
             List<DistractionTagViewModel> tagsViewModels = new List<DistractionTagViewModel>();
+
             foreach(string tagKey in model.TagsKeys)
             {
                 DistractionTagViewModel tagView = await _tagsMapper.GetViewModel(tagKey);
                 tagsViewModels.Add(tagView);
             }
             TimeOnly time = TimeOnly.FromDateTime(model.Date);
-
             DistractionLogViewModel logView = new DistractionLogViewModel
             {
                 Notes = model.Notes,
