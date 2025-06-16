@@ -7,37 +7,37 @@
 
 <MudText Align="Align.Center" Typo="Typo.h2">@_todayDate.ToString("dd.MM.yyyy")</MudText>
 <MudContainer MaxWidth="MaxWidth.Medium">
-    @if(_models is not null)
-    {
-        @foreach(var viewModel in _logViewModels)
+    <MudStack Spacing="3" Row>
+        @if (_viewModels is not null)
         {
-            <MudText>TIME: @viewModel.TimeOfCreation</MudText>
-            <MudText>NOTES: @viewModel.Notes</MudText>
-            @foreach(var tag in viewModel.Tags)
+            @foreach (var viewModel in _viewModels)
             {
-                <DistractionTagChip ChipColor="@tag.Color", ChipIcon="@tag.Icon"></DistractionTagChip>
+                <DistractionLogCard model="@viewModel" />
             }
         }
-    }
-
+    </MudStack>
 </MudContainer>
 <h3>TodayLogs</h3>
 
 @code {
-    private List<DistractionLogModel> _models;
-    private List<DistractionLogViewModel> _logViewModels;
     private DateTime _todayDate;
+    private List<DistractionLogViewModel> _viewModels = new List<DistractionLogViewModel>();
 
     protected override async Task OnInitializedAsync()
     {
         _todayDate = DateTime.Now.Date;
-        _models = await LogsRepo.GetTodayLogsAsync();
+        List<DistractionLogModel> models = await LogsRepo.GetTodayLogsAsync();
+        foreach (var model in models)
+        {
+            DistractionLogViewModel viewModel = await LogsMapper.MapToViewModel(model);
+            _viewModels.Add(viewModel);
+        }
     }
 
-    private async Task DeleteLog(DistractionLogModel modelToDelete)
-    {
-        await LogsRepo.DeleteLogAsync(modelToDelete);
-        _models.Remove(modelToDelete);
-        StateHasChanged();
-    }
+    // private async Task DeleteLog(DistractionLogModel modelToDelete)
+    // {
+    //     await LogsRepo.DeleteLogAsync(modelToDelete);
+    //     _models.Remove(modelToDelete);
+    //     StateHasChanged();
+    // }
 }

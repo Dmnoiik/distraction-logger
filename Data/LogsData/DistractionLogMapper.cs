@@ -2,6 +2,7 @@
 using Distraction_Logger_PWA.LogAndTagsData.Tags;
 using Distraction_Logger_PWA.Models;
 using Distraction_Logger_PWA.ViewModels;
+using System.Globalization;
 
 namespace Distraction_Logger_PWA.Data.LogsData
 {
@@ -22,6 +23,7 @@ namespace Distraction_Logger_PWA.Data.LogsData
                 DistractionTagViewModel tagView = await _tagsMapper.GetViewModel(tagKey);
                 tagsViewModels.Add(tagView);
             }
+
             TimeOnly time = TimeOnly.FromDateTime(model.Date);
             DistractionLogViewModel logView = new DistractionLogViewModel
             {

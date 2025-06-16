@@ -1,0 +1,31 @@
+﻿@using System.Globalization
+<MudCard Square>
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudStack Row>
+                <MudText>@ChangeTimeFormat(model.TimeOfCreation)</MudText>
+                @foreach (var tag in @model.Tags)
+                {
+                    <MudChip T="DistractionTagViewModel" Icon="@tag.Icon" Color="@tag.Color"></MudChip>
+                }
+            </MudStack>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudText Typo="Typo.h2">@model.Notes</MudText>
+    </MudCardContent>
+    <MudCardActions>
+    </MudCardActions>
+</MudCard>
+
+@code {
+    [Parameter]
+    public DistractionLogViewModel model { get; set; }
+
+    private string ChangeTimeFormat(TimeOnly timeNotFormatted)
+    {
+
+        string output = timeNotFormatted.ToString("T", CultureInfo.CreateSpecificCulture("pl-pl"));
+        return output;
+    }
+}
