@@ -27,6 +27,7 @@ namespace Distraction_Logger_PWA.Data.LogsData
             TimeOnly time = TimeOnly.FromDateTime(model.Date);
             DistractionLogViewModel logView = new DistractionLogViewModel
             {
+                Id = model.ID,
                 Notes = model.Notes,
                 Tags = tagsViewModels,
                 TimeOfCreation = time
