@@ -14,7 +14,9 @@
     <MudCardContent>
         <MudText Typo="Typo.h2">@model.Notes</MudText>
     </MudCardContent>
+    <MudButton OnClick="@NotifyDelete">Delete</MudButton>
     <MudCardActions>
+
     </MudCardActions>
 </MudCard>
 
@@ -22,10 +24,17 @@
     [Parameter]
     public DistractionLogViewModel model { get; set; }
 
+    [Parameter]
+    public EventCallback<long> OnDelete { get; set; }
+
     private string ChangeTimeFormat(TimeOnly timeNotFormatted)
     {
-
-        string output = timeNotFormatted.ToString("T", CultureInfo.CreateSpecificCulture("pl-pl"));
+        string output = timeNotFormatted.ToString("T", CultureInfo.CurrentCulture);
         return output;
+    }
+
+    private async Task NotifyDelete()
+    {
+        await OnDelete.InvokeAsync(model.Id);
     }
 }
