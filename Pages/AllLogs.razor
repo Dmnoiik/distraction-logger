@@ -1,32 +1,29 @@
-﻿@page "/today"
+﻿@page "/all"
 @inject DistractionLogRepository LogsRepo
 @inject DistractionTagRepository TagsRepo
 @inject DistractionLogMapper LogsMapper
 @inject DistractionTagMapper TagsMapper
 
-
-<MudText Align="Align.Center" Typo="Typo.h2">@_todayDate.ToString("dd.MM.yyyy")</MudText>
 <MudContainer MaxWidth="MaxWidth.Large">
     <MudStack Spacing="3" Row>
         @if (_models is not null)
         {
             @foreach (var viewModel in _viewModels)
             {
-                <DistractionLogCard model="@viewModel" OnDelete="@DeleteLog"/>
+                <DistractionLogCard model="@viewModel" OnDelete="@DeleteLog" />
             }
         }
     </MudStack>
 </MudContainer>
 
+
 @code {
-    private DateTime _todayDate;
     private List<DistractionLogViewModel> _viewModels = new List<DistractionLogViewModel>();
     private List<DistractionLogModel> _models = new List<DistractionLogModel>();
 
     protected override async Task OnInitializedAsync()
     {
-        _todayDate = DateTime.Now.Date;
-        _models = await LogsRepo.GetTodayLogsAsync();
+        _models = await LogsRepo.GetAllLogsAsync();
         foreach (var model in _models)
         {
             DistractionLogViewModel viewModel = await LogsMapper.MapToViewModel(model);
