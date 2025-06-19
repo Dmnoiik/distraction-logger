@@ -15,16 +15,18 @@
                         <MudExpansionPanel>
                             <TitleContent>
                                 <MudText>📆 @uniqueDate.ToShortDateString()</MudText>
-                                <MudText>Most appeared tag: XD</MudText>
                                 @{
                                     DistractionTagViewModel mostFrequentTag = TagAnalyzer.GetMostFrequentTag(_datesDict[uniqueDate]);
-                                    <MudChip T="DistractionTagViewModel" Text="@mostFrequentTag.Name" Icon="@mostFrequentTag.Icon" Color="@mostFrequentTag.Color"></MudChip>
+                                    <MudText>
+                                        Most appeared tag: <DistractionChipView Tag="mostFrequentTag"/>
+                                    </MudText>
                                 }
+
                             </TitleContent>
                             <ChildContent>
                                 @foreach (DistractionLogViewModel viewModel in _datesDict[uniqueDate])
                                 {
-                                    <DistractionLogCard model="viewModel" OnDelete="@DeleteLog"></DistractionLogCard>
+                                    <DistractionLogCard model="viewModel" ShouldHaveDelete="false"></DistractionLogCard>
                                 }
                             </ChildContent>
 

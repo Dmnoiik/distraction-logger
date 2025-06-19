@@ -5,7 +5,7 @@
             <MudStack Row>
                 @foreach (var tag in @model.Tags)
                 {
-                    <MudChip T="DistractionTagViewModel" Text="@tag.Name" Icon="@tag.Icon" Color="@tag.Color"></MudChip>
+                    <DistractionChipView Tag="tag"/>
                 }
                 <MudText>@GetJustTime(model.DateOfCreation)</MudText>
             </MudStack>
@@ -15,13 +15,19 @@
         <MudText Typo="Typo.h5">@model.Notes</MudText>
     </MudCardContent>
     <MudCardActions Style="margin-left:auto;">
-        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@NotifyDelete">Delete</MudButton>
+        @if (ShouldHaveDelete)
+        {
+            <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@NotifyDelete">Delete</MudButton>
+        }
     </MudCardActions>
 </MudCard>
 
 @code {
     [Parameter]
     public DistractionLogViewModel model { get; set; }
+
+    [Parameter]
+    public bool ShouldHaveDelete { get; set; }
 
     [Parameter]
     public EventCallback<long> OnDelete { get; set; }

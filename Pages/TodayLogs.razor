@@ -12,7 +12,7 @@
         {
             @foreach (var viewModel in _viewModels)
             {
-                <DistractionLogCard model="@viewModel" OnDelete="@DeleteLog"/>
+                <DistractionLogCard model="@viewModel" OnDelete="@DeleteLog" ShouldHaveDelete/>
             }
         }
     </MudStack>
