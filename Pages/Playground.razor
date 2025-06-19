@@ -1,27 +1,23 @@
 ﻿@page "/playground"
-@inject DistractionLogRepository LogsRepo
-@inject DistractionTagRepository TagsRepo
-@inject DistractionLogMapper LogsMapper
-@inject DistractionTagMapper TagsMapper
 
-<MudText>PLAYGROUND!!!!</MudText>
-
-@if(_logModel is not null)
-{
-    <MudText>THIS IS VIEW MODEL: @_logViewModel.Notes</MudText>
-    <MudText>THIS IS TIME: @_logViewModel.TimeOfCreation</MudText>
-}
-
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudStack Spacing="5">
+        <MudExpansionPanels >
+            <MudExpansionPanel Text="Panel One" MaxHeight="150" Expanded="true">
+                Panel One Content
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="Panel Two" MaxHeight="500">
+                Panel Two Content
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="Panel Three" MaxHeight="1000">
+                Panel Three Content
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="Panel Four">
+                Panel Four Content
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    </MudStack>
+</MudContainer>
 
 @code {
-    private DateTime _todayDate;
-    private DistractionLogModel _logModel;
-    private DistractionLogViewModel _logViewModel;
-
-    protected override async Task OnInitializedAsync()
-    {
-        _todayDate = DateTime.Now.Date;
-        _logModel = await LogsRepo.GetLogByIdAsync(26);
-        _logViewModel = await LogsMapper.MapToViewModel(_logModel);
-    }
 }

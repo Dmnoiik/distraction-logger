@@ -3,7 +3,7 @@
     <MudCardHeader>
         <CardHeaderContent>
             <MudStack Row>
-                <MudText>@ChangeTimeFormat(model.TimeOfCreation)</MudText>
+                <MudText>@GetJustTime(model.DateOfCreation)</MudText>
                 @foreach (var tag in @model.Tags)
                 {
                     <MudChip T="DistractionTagViewModel" Icon="@tag.Icon" Color="@tag.Color"></MudChip>
@@ -27,9 +27,10 @@
     [Parameter]
     public EventCallback<long> OnDelete { get; set; }
 
-    private string ChangeTimeFormat(TimeOnly timeNotFormatted)
+    private string GetJustTime(DateTime fullDate)
     {
-        string output = timeNotFormatted.ToString("T", CultureInfo.CurrentCulture);
+        TimeOnly timeFromDate = TimeOnly.FromDateTime(fullDate);
+        string output = timeFromDate.ToString("T", CultureInfo.CurrentCulture);
         return output;
     }
 

@@ -26,5 +26,16 @@ namespace Distraction_Logger_PWA.LogAndTagsData.Tags
                 Icon = tagIcon,
             };
         }
+
+        public async Task<List<DistractionTagViewModel>> GetViewModelList(List<string> iconKeys)
+        {
+            List<DistractionTagViewModel> output = new List<DistractionTagViewModel>();
+            foreach(string iconKey in iconKeys)
+            {
+                var currentTagView = await GetViewModel(iconKey);
+                output.Add(currentTagView);
+            }
+            return output;
+        }
     }
 }

@@ -16,24 +16,36 @@ namespace Distraction_Logger_PWA.Data.LogsData
 
         public async Task<DistractionLogViewModel> MapToViewModel(DistractionLogModel model)
         {
-            List<DistractionTagViewModel> tagsViewModels = new List<DistractionTagViewModel>();
+            //List<DistractionTagViewModel> tagsViewModels = new List<DistractionTagViewModel>();
 
-            foreach(string tagKey in model.TagsKeys)
-            {
-                DistractionTagViewModel tagView = await _tagsMapper.GetViewModel(tagKey);
-                tagsViewModels.Add(tagView);
-            }
+            //foreach (string tagKey in model.TagsKeys)
+            //{
+            //    DistractionTagViewModel tagView = await _tagsMapper.GetViewModel(tagKey);
+            //    tagsViewModels.Add(tagView);
+            //}
 
-            TimeOnly time = TimeOnly.FromDateTime(model.Date);
+            List<DistractionTagViewModel> tagsViewModels = await _tagsMapper.GetViewModelList(model.TagsKeys);
+
             DistractionLogViewModel logView = new DistractionLogViewModel
             {
                 Id = model.ID,
                 Notes = model.Notes,
                 Tags = tagsViewModels,
-                TimeOfCreation = time
+                DateOfCreation = model.Date
             };
 
             return logView;
+        }
+
+        public async Task<List<DistractionLogViewModel>> MapToViewModelList(List<DistractionLogModel> listOfModels)
+        {
+            List<DistractionLogViewModel> viewModelsOutput = new List<DistractionLogViewModel>();
+            foreach (DistractionLogModel model in listOfModels)
+            {
+                var currentView = await MapToViewModel(model);
+                viewModelsOutput.Add(currentView);
+            }
+            return viewModelsOutput;
         }
     }
 }
