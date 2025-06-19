@@ -16,6 +16,10 @@
                             <TitleContent>
                                 <MudText>📆 @uniqueDate.ToShortDateString()</MudText>
                                 <MudText>Most appeared tag: XD</MudText>
+                                @{
+                                    DistractionTagViewModel mostFrequentTag = TagAnalyzer.GetMostFrequentTag(_datesDict[uniqueDate]);
+                                    <MudChip T="DistractionTagViewModel" Text="@mostFrequentTag.Name" Icon="@mostFrequentTag.Icon" Color="@mostFrequentTag.Color"></MudChip>
+                                }
                             </TitleContent>
                             <ChildContent>
                                 @foreach (DistractionLogViewModel viewModel in _datesDict[uniqueDate])
@@ -34,6 +38,8 @@
 
 
 @code {
+
+
     private List<DistractionLogViewModel> _viewModels = new List<DistractionLogViewModel>();
     private List<DistractionLogModel> _models = new List<DistractionLogModel>();
     private Dictionary<DateTime, List<DistractionLogViewModel>> _datesDict = new Dictionary<DateTime, List<DistractionLogViewModel>>();
@@ -63,8 +69,7 @@
         }
         return outputDict;
     }
-
-
+    
     private async Task DeleteLog(long modelToDeleteId)
     {
         DistractionLogModel modelToDelete = _models.First(x => x.ID == modelToDeleteId);

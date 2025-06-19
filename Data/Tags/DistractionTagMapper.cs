@@ -19,13 +19,13 @@ namespace Distraction_Logger_PWA.LogAndTagsData.Tags
             DistractionTag tag = await _tagsRepo.GetTagModel(iconKey);
             string tagIcon = _tagsRepo.GetTagIcon(tag.IconKey);
             Color colorIcon = _tagsRepo.GetTagColor(tag.ColorKey);
-            string note = tag.Description;
+            string name = tag.Name;
 
             return new DistractionTagViewModel
             {
                 Color = colorIcon,
                 Icon = tagIcon,
-                Note = note
+                Name = name
             };
         }
 

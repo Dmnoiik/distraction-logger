@@ -3,20 +3,19 @@
     <MudCardHeader>
         <CardHeaderContent>
             <MudStack Row>
-                <MudText>@GetJustTime(model.DateOfCreation)</MudText>
                 @foreach (var tag in @model.Tags)
                 {
-                    <MudChip T="DistractionTagViewModel" Icon="@tag.Icon" Color="@tag.Color"></MudChip>
+                    <MudChip T="DistractionTagViewModel" Text="@tag.Name" Icon="@tag.Icon" Color="@tag.Color"></MudChip>
                 }
+                <MudText>@GetJustTime(model.DateOfCreation)</MudText>
             </MudStack>
         </CardHeaderContent>
     </MudCardHeader>
     <MudCardContent>
-        <MudText Typo="Typo.h2">@model.Notes</MudText>
+        <MudText Typo="Typo.h5">@model.Notes</MudText>
     </MudCardContent>
-    <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@NotifyDelete">Delete</MudButton>
-    <MudCardActions>
-
+    <MudCardActions Style="margin-left:auto;">
+        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@NotifyDelete">Delete</MudButton>
     </MudCardActions>
 </MudCard>
 
