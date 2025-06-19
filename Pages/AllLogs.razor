@@ -4,75 +4,56 @@
 @inject DistractionLogMapper LogsMapper
 @inject DistractionTagMapper TagsMapper
 
-<MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
-    <MudStack Spacing="3">
-        @if (_models is not null && _datesDict is not null)
-        {
-            <MudExpansionPanels>
-                @foreach (DateTime uniqueDate in _uniqueDates)
+@if (_models is not null)
+{
+    <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
+        <MudStack Spacing="3">
+
+            <MudExpansionPanels MultiExpansion="false">
+                @foreach (DateTime uniqueDate in _datesDict.Keys)
                 {
-                    <MudExpansionPanel Text="@uniqueDate.ToLongDateString()">
-                        @{
-                            var currentViewModelList = _datesDict[uniqueDate];
-                            foreach (var viewModel in currentViewModelList)
-                            {
-                                <DistractionLogCard model="@viewModel" OnDelete="@DeleteLog" />
-
-                            }
-                        }
-                        @*                         @foreach (var viewModel in _datesDict[uniqueDate.Date])
+                    <MudExpansionPanel Text="@uniqueDate.ToString()">
+                        @foreach (DistractionLogViewModel viewModel in _datesDict[uniqueDate])
                         {
-                            <DistractionLogCard model="@viewModel" OnDelete="@DeleteLog" />
-                        } *@
-
+                            <DistractionLogCard model="viewModel" OnDelete="@DeleteLog"></DistractionLogCard>
+                        }
                     </MudExpansionPanel>
                 }
             </MudExpansionPanels>
-        }
-    </MudStack>
-</MudContainer>
+        </MudStack>
+    </MudContainer>
+}
 
 
 @code {
     private List<DistractionLogViewModel> _viewModels = new List<DistractionLogViewModel>();
     private List<DistractionLogModel> _models = new List<DistractionLogModel>();
-    // private HashSet<DateTime> _uniqueDates = new HashSet<DateTime>();
     private Dictionary<DateTime, List<DistractionLogViewModel>> _datesDict = new Dictionary<DateTime, List<DistractionLogViewModel>>();
 
     protected override async Task OnInitializedAsync()
     {
         _models = await LogsRepo.GetAllLogsAsync();
         _viewModels = await LogsMapper.MapToViewModelList(_models);
-        // _uniqueDates = GetUniqueDates();
-        foreach (var uniqueDate in _uniqueDates)
-        {
-            var viewModelsForDate = GetViewModelsForDate(uniqueDate);
-            Console.WriteLine($"Loaded views for date ({uniqueDate}): {viewModelsForDate.Count}");
-            _datesDict.Add(uniqueDate, viewModelsForDate);
-        }
+        _datesDict = CreateLogsByDatesDict(_viewModels);
     }
 
-    private HashSet<DateTime> GetUniqueDates()
+    private Dictionary<DateTime, List<DistractionLogViewModel>> CreateLogsByDatesDict(List<DistractionLogViewModel> viewModels)
     {
-        HashSet<DateTime> uniqueDates = new HashSet<DateTime>();
-        foreach (var model in _models)
+        Dictionary<DateTime, List<DistractionLogViewModel>> outputDict = new();
+
+        foreach (var viewModel in _viewModels)
         {
-            uniqueDates.Add(model.Date.Date);
+            DateTime viewModelDate = viewModel.DateOfCreation.Date;
+            if (outputDict.ContainsKey(viewModelDate))
+            {
+                outputDict[viewModelDate].Add(viewModel);
+            }
+            else
+            {
+                outputDict.Add(viewModelDate, new List<DistractionLogViewModel> { viewModel });
+            }
         }
-        return uniqueDates;
-    }
-
-    private List<DistractionLogViewModel> GetViewModelsForDate(DateTime date)
-    {
-        List<DistractionLogViewModel> output = new List<DistractionLogViewModel>();
-        output = _viewModels.Where(viewModel => viewModel.DateOfCreation.Date == date.Date).ToList();
-
-        if (output is null)
-        {
-            throw new Exception($"Couldn't find models for date: {date.Date}");
-        }
-
-        return output;
+        return outputDict;
     }
 
 

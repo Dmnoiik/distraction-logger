@@ -6,5 +6,10 @@
         public string Notes { get; set; }
         public List<DistractionTagViewModel> Tags { get; set; }
         public DateTime DateOfCreation { get; set; }
+
+        public override string ToString()
+        {
+            return $"Notes: {Notes}, Time of creation: {DateOfCreation}";
+        }
     }
 }
