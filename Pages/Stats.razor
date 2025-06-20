@@ -34,7 +34,7 @@
         </MudItem>
         <MudItem xs="6">
             <MudPaper>
-                <MudChart ChartType="ChartType.Line" XAxisLabels="@GetXAxisLabels(_viewModels)"/>
+                <MudChart ChartType="ChartType.Line" XAxisLabels="@GetXAxisLabels(_viewModels)" ChartSeries="GetSeriesForChart(_logsByUniqueDates)"/>
             </MudPaper>
         </MudItem>
         <MudItem xs="6">
@@ -68,25 +68,36 @@
         _viewModels = await LogsMapper.MapToViewModelList(_models);
         _tagsFrequency = TagAnalyzer.GetDescFrequencyTags(_viewModels);
         _mostFrequentTags = TagAnalyzer.GetTopFrequentTags(_tagsFrequency);
+        _logsByUniqueDates = LogAnalyzer.GetLogsByUniqueDates(_viewModels);
+        foreach (var (uniqueDate, viewModels) in _logsByUniqueDates)
+        {
+            Console.WriteLine($"DATE: {uniqueDate.ToShortDateString()}. Num of models: {viewModels.Count}");
+        }
     }
 
     private string[] GetXAxisLabels(List<DistractionLogViewModel> models)
     {
         var uniqueDates = _logsByUniqueDates.Keys;
         return uniqueDates
-        .Select(date => date.ToString())
+        .Select(date => date.ToShortDateString())
         .ToArray();
     }
 
     private List<ChartSeries> GetSeriesForChart(Dictionary<DateTime, List<DistractionLogViewModel>> logsByDate)
     {
-        ChartSeries logsPerDay = new();
-        List<int> numOfLogsPerDay = new();
-        logsPerDay.Name = "Logs per day";
-        foreach(var uniqueDate in logsByDate)
-        {
-            
-        }
+        List<ChartSeries> logsPerDaySeries = new();
 
+        ChartSeries logsPerDay = new();
+        logsPerDay.Name = "Logs per day";
+
+        List<double> numOfLogsPerDay = new();
+
+        foreach(var (uniqueDate, viewModels) in logsByDate)
+        {
+            numOfLogsPerDay.Add(viewModels.Count);
+        }
+        logsPerDay.Data = numOfLogsPerDay.ToArray();
+        logsPerDaySeries.Add(logsPerDay);
+        return logsPerDaySeries;
     }
 }

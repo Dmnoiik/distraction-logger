@@ -43,8 +43,9 @@ namespace Distraction_Logger_PWA.Data.LogsData
 
         public async Task<List<DistractionLogModel>> GetLogsFromLastXDays(int days = 7)
         {
-            DateTime endDate = DateTime.Now.Date;
+            DateTime endDate = DateTime.Now.Date.AddDays(1);
             DateTime startDate = endDate.Date.AddDays(-days);
+
             var query = await GetQueryAsync();
             var logs = await query.Where(log => log.Date >= startDate && log.Date <= endDate).ToListAsync();
             return logs;
