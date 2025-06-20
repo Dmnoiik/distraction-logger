@@ -20,15 +20,20 @@
             </MudPaper>
         </MudItem>
         <MudItem xs="6">
-            <MudPaper Height="250px">
-                <DistractionMostFrequentTags Tags="_mostFrequentTags" />
-                <MudDivider />
-                <ul class="tags-count">
-                    @foreach (TagWithFrequency tagFrequency in _tagsFrequency)
+            <MudPaper Height="250px" Class="pa-3">
+                <DistractionMostFrequentTags Tags="_mostFrequentTags"/>
+                <MudDivider Class="mb-4"/>
+                <MudGrid Spacing="2" Class="pa-2" Justify="Justify.Center">
+                    @foreach (var tag in _tagsFrequency)
                     {
-                        <li class="tag-with-count"><DistractionChipView Tag="@tagFrequency.TagViewModel" />: @tagFrequency.Frequency</li>
+                        <MudItem xs="5">
+                            <MudStack Row AlignItems="AlignItems.Center" Justify="Justify.Center">
+                                <DistractionChipView Tag="@tag.TagViewModel" />
+                                <MudText Typo="Typo.h6">@tag.Frequency</MudText>
+                            </MudStack>
+                        </MudItem>
                     }
-                </ul>
+                </MudGrid>
             </MudPaper>
         </MudItem>
         <MudItem xs="6">

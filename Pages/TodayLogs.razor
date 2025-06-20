@@ -7,7 +7,7 @@
 
 <MudText Align="Align.Center" Typo="Typo.h2">@_todayDate.ToString("dd.MM.yyyy")</MudText>
 <MudContainer MaxWidth="MaxWidth.Large">
-    <MudStack Spacing="3" Row>
+    <MudStack Spacing="3" Row Wrap="Wrap.Wrap" Justify="Justify.Center">
         @if (_models is not null)
         {
             @foreach (var viewModel in _viewModels)

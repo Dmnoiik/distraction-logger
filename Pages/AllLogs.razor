@@ -6,33 +6,33 @@
 
 @if (_models is not null)
 {
-    <MudContainer MaxWidth="MaxWidth.Medium">
+    <MudContainer MaxWidth="MaxWidth.Large">
         <MudStack Spacing="3">
-            <div class="mycontainer">
-                <MudExpansionPanels MultiExpansion="false">
-                    @foreach (DateTime uniqueDate in _datesDict.Keys)
-                    {
-                        <MudExpansionPanel>
-                            <TitleContent>
-                                <MudText>📆 @uniqueDate.ToShortDateString()</MudText>
-                                @{
-                                    var tagsCount = TagAnalyzer.GetDescFrequencyTags(_datesDict[uniqueDate]);
-                                    var mostFrequentTags = TagAnalyzer.GetTopFrequentTags(tagsCount);
-                                    <DistractionMostFrequentTags Tags="mostFrequentTags" />
-                                }
+            <MudExpansionPanels MultiExpansion="false">
+                @foreach (DateTime uniqueDate in _datesDict.Keys)
+                {
+                    <MudExpansionPanel>
+                        <TitleContent>
+                            <MudText>📆 @uniqueDate.ToShortDateString()</MudText>
+                            @{
+                                var tagsCount = TagAnalyzer.GetDescFrequencyTags(_datesDict[uniqueDate]);
+                                var mostFrequentTags = TagAnalyzer.GetTopFrequentTags(tagsCount);
+                                <DistractionMostFrequentTags Tags="mostFrequentTags" />
+                            }
 
-                            </TitleContent>
-                            <ChildContent>
+                        </TitleContent>
+                        <ChildContent>
+                            <MudStack Spacing="3" Row Wrap="Wrap.Wrap" Class="pa-3" Justify="Justify.Center" AlignItems="AlignItems.Center">
                                 @foreach (DistractionLogViewModel viewModel in _datesDict[uniqueDate])
                                 {
                                     <DistractionLogCard model="viewModel" ShouldHaveDelete="false"></DistractionLogCard>
                                 }
-                            </ChildContent>
+                            </MudStack>
+                        </ChildContent>
 
-                        </MudExpansionPanel>
-                    }
-                </MudExpansionPanels>
-            </div>
+                    </MudExpansionPanel>
+                }
+            </MudExpansionPanels>
         </MudStack>
     </MudContainer>
 }

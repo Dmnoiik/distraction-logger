@@ -1,18 +1,21 @@
 ﻿@using System.Globalization
-<MudCard Square>
+<MudCard Square Style="width: 350px;">
     <MudCardHeader>
         <CardHeaderContent>
-            <MudStack Row>
-                @foreach (var tag in @model.Tags)
-                {
-                    <DistractionChipView Tag="tag"/>
-                }
-                <MudText>@GetJustTime(model.DateOfCreation)</MudText>
+            <MudStack Row AlignItems="AlignItems.Center" Class="mb-2" Justify="Justify.SpaceBetween">
+                <MudStack Justify="Justify.FlexStart" Row>
+                    @foreach (var tag in @model.Tags)
+                    {
+                        <DistractionChipView Tag="tag" />
+                    }
+                </MudStack>
+                <MudText Typo="Typo.h6">@GetJustTime(model.DateOfCreation)</MudText>
             </MudStack>
+            <MudDivider />
         </CardHeaderContent>
     </MudCardHeader>
     <MudCardContent>
-        <MudText Typo="Typo.h5">@model.Notes</MudText>
+        <MudText Align=Align.Center Typo="Typo.h5">@model.Notes</MudText>
     </MudCardContent>
     <MudCardActions Style="margin-left:auto;">
         @if (ShouldHaveDelete)
@@ -35,7 +38,7 @@
     private string GetJustTime(DateTime fullDate)
     {
         TimeOnly timeFromDate = TimeOnly.FromDateTime(fullDate);
-        string output = timeFromDate.ToString("T", CultureInfo.CurrentCulture);
+        string output = timeFromDate.ToShortTimeString();
         return output;
     }
 
