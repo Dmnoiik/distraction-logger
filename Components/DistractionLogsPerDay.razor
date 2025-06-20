@@ -1,0 +1,45 @@
+﻿<MudChart ChartType="ChartType.Line" Width="99%" ChartOptions="_options" XAxisLabels="GetXAxisLabels()" ChartSeries="GenerateSeriesForChart()" />
+
+@code {
+    [Parameter]
+    public Dictionary<DateTime, List<DistractionLogViewModel>> LogsPerDate { get; set; } = new();
+
+    private readonly ChartOptions _options = new();
+
+    protected override void OnInitialized()
+    {
+        _options.YAxisTicks = 1;
+    }
+
+    private string[] GetXAxisLabels()
+    {
+        var uniqueDates = LogsPerDate.Keys;
+        return uniqueDates
+        .Select(date => date.ToShortDateString())
+        .ToArray();
+    }
+
+    private List<ChartSeries> GenerateSeriesForChart()
+    {
+        List<ChartSeries> logsPerDaySeries = new();
+
+        ChartSeries logsPerDay = new();
+        logsPerDay.Name = "Logs per day";
+
+        List<double> numOfLogsPerDay = new();
+
+        foreach (var (uniqueDate, viewModels) in LogsPerDate)
+        {
+            numOfLogsPerDay.Add(viewModels.Count);
+        }
+
+        logsPerDay.Data = numOfLogsPerDay.ToArray();
+        logsPerDaySeries.Add(logsPerDay);
+
+        logsPerDaySeries.Add(new ChartSeries
+            {
+                Data = new double[] { 10 },
+            });
+        return logsPerDaySeries;
+    }
+}
