@@ -4,17 +4,30 @@ namespace Distraction_Logger_PWA.Data.Tags
 {
     public class TagAnalyzer
     {
-        //public static DistractionTagViewModel GetMostFrequentTag(List<DistractionLogViewModel> logViewModels)
-        //{
-        //    Dictionary<string, TagWithFrequency> tagFrequencyDict = GetTagsCount(logViewModels);
-        //    DistractionTagViewModel mostFrequentTag = tagFrequencyDict.Values
-        //        .OrderByDescending(x => x.Frequency)
-        //        .First()
-        //        .TagViewModel;
-        //    return mostFrequentTag;
-        //}
 
-        public static Dictionary<string, TagWithFrequency> GetTagsCount(List<DistractionLogViewModel> logViewModels)
+        public static List<DistractionTagViewModel> GetTopFrequentTags(List<TagWithFrequency> tagsWithFrequency)
+        {
+            if(tagsWithFrequency.Count == 0)
+            {
+                return new();
+            }
+
+            int maxFrequency = tagsWithFrequency.First().Frequency;
+
+            return tagsWithFrequency
+                .Where(tag => tag.Frequency == maxFrequency)
+                .Select(tag => tag.TagViewModel)
+                .ToList();
+        }
+
+        public static List<TagWithFrequency> GetDescFrequencyTags(List<DistractionLogViewModel> models)
+        {
+            var tagsCount = GetTagsCount(models);
+            var orderedTagsCount = tagsCount.OrderByDescending(x => x.Value.Frequency).ToDictionary();
+            return orderedTagsCount.Values.ToList();
+        }
+
+        private static Dictionary<string, TagWithFrequency> GetTagsCount(List<DistractionLogViewModel> logViewModels)
         {
             Dictionary<string, TagWithFrequency> tagFrequencyDict = new();
             foreach (DistractionLogViewModel logViewModel in logViewModels)
@@ -36,7 +49,6 @@ namespace Distraction_Logger_PWA.Data.Tags
                     }
                 }
             }
-            var orderedTagsCount = tagFrequencyDict.OrderDescending();
             return tagFrequencyDict;
         }
     }

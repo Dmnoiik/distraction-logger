@@ -16,10 +16,9 @@
                             <TitleContent>
                                 <MudText>📆 @uniqueDate.ToShortDateString()</MudText>
                                 @{
-                                    DistractionTagViewModel mostFrequentTag = TagAnalyzer.GetMostFrequentTag(_datesDict[uniqueDate]);
-                                    <MudText>
-                                        Most appeared tag: <DistractionChipView Tag="mostFrequentTag"/>
-                                    </MudText>
+                                    var tagsCount = TagAnalyzer.GetDescFrequencyTags(_datesDict[uniqueDate]);
+                                    var mostFrequentTags = TagAnalyzer.GetTopFrequentTags(tagsCount);
+                                    <DistractionMostFrequentTags Tags="mostFrequentTags" />
                                 }
 
                             </TitleContent>
@@ -71,7 +70,7 @@
         }
         return outputDict;
     }
-    
+
     private async Task DeleteLog(long modelToDeleteId)
     {
         DistractionLogModel modelToDelete = _models.First(x => x.ID == modelToDeleteId);

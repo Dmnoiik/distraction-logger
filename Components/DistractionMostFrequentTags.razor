@@ -1,0 +1,12 @@
+﻿<MudStack Row Spacing="3">
+    <MudText>Most frequent tag@(Tags.Count > 1 ? "s" : ""): </MudText>
+    @foreach (var mostFrequentTag in Tags)
+    {
+        <DistractionChipView Tag="mostFrequentTag" />
+    }
+</MudStack>
+
+@code {
+    [Parameter]
+    public List<DistractionTagViewModel> Tags { get; set; } = new();
+}

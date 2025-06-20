@@ -10,13 +10,7 @@
     <MudGrid>
         <MudItem xs="6">
             <MudPaper>
-                <MudStack Row Spacing="3">
-                    <MudText>Most frequent tag@(_mostFrequentTags.Count >= 1 ? "s" : ""): </MudText>
-                    @foreach(var mostFrequentTag in _mostFrequentTags)
-                    {
-                        <DistractionChipView Tag="mostFrequentTag" />
-                    }
-                </MudStack>
+                <DistractionMostFrequentTags Tags="_mostFrequentTags"/>
                 <MudDivider />
                 <ul class="tags-count">
                     @foreach (TagWithFrequency tagFrequency in _tagsFrequency)
@@ -46,33 +40,7 @@
     {
         _models = await LogsRepo.GetAllLogsAsync();
         _viewModels = await LogsMapper.MapToViewModelList(_models);
-        _tagsFrequency = GetDescFrequencyTags(_viewModels);
-        _mostFrequentTags = GetTopFrequentTags(_tagsFrequency);
-    }
-
-    private List<TagWithFrequency> GetDescFrequencyTags(List<DistractionLogViewModel> models)
-    {
-        var tagsCount = TagAnalyzer.GetTagsCount(models);
-        var orderedTagsCount = tagsCount.OrderByDescending(x => x.Value.Frequency).ToDictionary();
-        return orderedTagsCount.Values.ToList();
-    }
-
-    private List<DistractionTagViewModel> GetTopFrequentTags(List<TagWithFrequency> tagsWithFrequency)
-    {
-        List<DistractionTagViewModel> tagsOutput = new();
-        int mostFrequentTagCount = tagsWithFrequency.First().Frequency;
-        var topFrequentTags = tagsWithFrequency.Where(tag => tag.Frequency == mostFrequentTagCount).ToList();
-        if (topFrequentTags is not null && topFrequentTags.Count >= 1)
-        {
-            foreach (var tag in topFrequentTags)
-            {
-                tagsOutput.Add(tag.TagViewModel);
-            }
-        }
-        else
-        {
-            throw new Exception("Couldn't find top frequent tags");
-        }
-        return tagsOutput;
+        _tagsFrequency = TagAnalyzer.GetDescFrequencyTags(_viewModels);
+        _mostFrequentTags = TagAnalyzer.GetTopFrequentTags(_tagsFrequency);
     }
 }
