@@ -32,11 +32,6 @@ namespace Distraction_Logger_PWA.Data.LogsData
             return await query.ToListAsync();
         }
 
-        public async Task SaveLogAsync(DistractionLogModel model)
-        {
-            var query = await GetQueryAsync();
-            await query.AddAsync(model);
-        }
 
         public async Task<List<DistractionLogModel>> GetTodayLogsAsync()
         {
@@ -44,6 +39,20 @@ namespace Distraction_Logger_PWA.Data.LogsData
             var query = await GetQueryAsync();
             var allLogs = await query.Where(log => log.Date.Date == dateToday).ToListAsync();
             return allLogs;
+        }
+
+        public async Task<List<DistractionLogModel>> GetLogsFromLastXDays(int days = 7)
+        {
+            DateTime endDate = DateTime.Now.Date;
+            DateTime startDate = endDate.Date.AddDays(-days);
+            var query = await GetQueryAsync();
+            var logs = await query.Where(log => log.Date >= startDate && log.Date <= endDate).ToListAsync();
+            return logs;
+        }
+        public async Task SaveLogAsync(DistractionLogModel model)
+        {
+            var query = await GetQueryAsync();
+            await query.AddAsync(model);
         }
 
         public async Task DeleteLogAsync(DistractionLogModel model)

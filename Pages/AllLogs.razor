@@ -49,14 +49,15 @@
     {
         _models = await LogsRepo.GetAllLogsAsync();
         _viewModels = await LogsMapper.MapToViewModelList(_models);
-        _datesDict = CreateLogsByDatesDict(_viewModels);
+        // _datesDict = CreateLogsByDatesDict(_viewModels);
+        _datesDict = LogAnalyzer.GetLogsByUniqueDates(_viewModels);
     }
 
     private Dictionary<DateTime, List<DistractionLogViewModel>> CreateLogsByDatesDict(List<DistractionLogViewModel> viewModels)
     {
         Dictionary<DateTime, List<DistractionLogViewModel>> outputDict = new();
 
-        foreach (var viewModel in _viewModels)
+        foreach (var viewModel in viewModels)
         {
             DateTime viewModelDate = viewModel.DateOfCreation.Date;
             if (outputDict.ContainsKey(viewModelDate))

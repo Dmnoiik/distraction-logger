@@ -8,6 +8,18 @@
 <MudContainer MaxWidth="MaxWidth.Large">
 
     <MudGrid>
+        <MudItem xs="12">
+            <MudPaper>
+                <MudSelect 
+                @bind-Value="_lastXDays"
+                Label="Logs from">
+                    <MudSelectItem Value="3">Last 3 days</MudSelectItem>
+                    <MudSelectItem Value="7">Last 7 days</MudSelectItem>
+                    <MudSelectItem Value="30">Last 30 days</MudSelectItem>
+                </MudSelect>
+                <MudButton ButtonType="ButtonType.Button" OnClick="FilterLogsByDate">Filter logs</MudButton>
+            </MudPaper>
+        </MudItem>
         <MudItem xs="6">
             <MudPaper>
                 <DistractionMostFrequentTags Tags="_mostFrequentTags"/>
@@ -21,6 +33,9 @@
             </MudPaper>
         </MudItem>
         <MudItem xs="6">
+            <MudPaper>
+                <MudChart ChartType="ChartType.Line" XAxisLabels="@GetXAxisLabels(_viewModels)"/>
+            </MudPaper>
         </MudItem>
         <MudItem xs="6">
         </MudItem>
@@ -35,12 +50,43 @@
     private List<DistractionLogModel> _models = new List<DistractionLogModel>();
     private List<TagWithFrequency> _tagsFrequency = new();
     private List<DistractionTagViewModel> _mostFrequentTags = new();
+    private Dictionary<DateTime, List<DistractionLogViewModel>> _logsByUniqueDates = new Dictionary<DateTime, List<DistractionLogViewModel>>();
+    private int _lastXDays = 7;
 
     protected override async Task OnInitializedAsync()
     {
-        _models = await LogsRepo.GetAllLogsAsync();
+        _models = await LogsRepo.GetLogsFromLastXDays();
         _viewModels = await LogsMapper.MapToViewModelList(_models);
         _tagsFrequency = TagAnalyzer.GetDescFrequencyTags(_viewModels);
         _mostFrequentTags = TagAnalyzer.GetTopFrequentTags(_tagsFrequency);
+        _logsByUniqueDates = LogAnalyzer.GetLogsByUniqueDates(_viewModels);
+    }
+
+    private async Task FilterLogsByDate()
+    {
+        _models = await LogsRepo.GetLogsFromLastXDays(_lastXDays);
+        _viewModels = await LogsMapper.MapToViewModelList(_models);
+        _tagsFrequency = TagAnalyzer.GetDescFrequencyTags(_viewModels);
+        _mostFrequentTags = TagAnalyzer.GetTopFrequentTags(_tagsFrequency);
+    }
+
+    private string[] GetXAxisLabels(List<DistractionLogViewModel> models)
+    {
+        var uniqueDates = _logsByUniqueDates.Keys;
+        return uniqueDates
+        .Select(date => date.ToString())
+        .ToArray();
+    }
+
+    private List<ChartSeries> GetSeriesForChart(Dictionary<DateTime, List<DistractionLogViewModel>> logsByDate)
+    {
+        ChartSeries logsPerDay = new();
+        List<int> numOfLogsPerDay = new();
+        logsPerDay.Name = "Logs per day";
+        foreach(var uniqueDate in logsByDate)
+        {
+            
+        }
+
     }
 }
