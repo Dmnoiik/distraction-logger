@@ -4,23 +4,23 @@
 @inject DistractionLogMapper LogsMapper
 @inject DistractionTagMapper TagsMapper
 
-<MudText Typo="Typo.h3">Statistics</MudText>
-<MudContainer MaxWidth="MaxWidth.Large">
+<MudText Align=Align.Center Typo="Typo.h5">Statistics</MudText>
+<MudContainer MaxWidth="MaxWidth.Large" Class="py-5">
 
     <MudGrid>
         <MudItem xs="12">
-            <MudPaper>
+            <MudPaper Class="pa-3">
                 <MudSelect @bind-Value="_lastXDays"
                            Label="Logs from">
                     <MudSelectItem Value="3">Last 3 days</MudSelectItem>
                     <MudSelectItem Value="7">Last 7 days</MudSelectItem>
                     <MudSelectItem Value="30">Last 30 days</MudSelectItem>
                 </MudSelect>
-                <MudButton ButtonType="ButtonType.Button" OnClick="FilterLogsByDate">Filter logs</MudButton>
+                <MudButton Style="margin-left:auto;" ButtonType="ButtonType.Button" Variant="Variant.Filled" Color="Color.Primary" OnClick="FilterLogsByDate">Filter logs</MudButton>
             </MudPaper>
         </MudItem>
         <MudItem xs="6">
-            <MudPaper>
+            <MudPaper Height="250px">
                 <DistractionMostFrequentTags Tags="_mostFrequentTags" />
                 <MudDivider />
                 <ul class="tags-count">
@@ -32,12 +32,12 @@
             </MudPaper>
         </MudItem>
         <MudItem xs="6">
-            <MudPaper>
+            <MudPaper Height="250px">
                 <DistractionLogsTimeComparison Models="_viewModels" DateRangeDays="_lastXDays" />
             </MudPaper>
         </MudItem>
         <MudItem xs="12">
-            <MudPaper >
+            <MudPaper Height="400px">
                 <DistractionLogsPerDay LogsPerDate="_logsByUniqueDates" />
             </MudPaper>
         </MudItem>

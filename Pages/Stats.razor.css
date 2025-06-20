@@ -1,8 +1,9 @@
 ﻿.tags-count {
 	list-style: none;
 	padding: 8px;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	height: 150px;
 }
 
-.tag-with-count {
-
-}
