@@ -4,7 +4,6 @@ namespace Distraction_Logger_PWA.Data.LogsData
 {
     public class LogAnalyzer
     {
-
         public static Dictionary<DateTime, List<DistractionLogViewModel>> GetLogsByUniqueDates(List<DistractionLogViewModel> viewModels)
         {
             Dictionary<DateTime, List<DistractionLogViewModel>> outputDict = new();

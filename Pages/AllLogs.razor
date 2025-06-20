@@ -7,6 +7,8 @@
 @if (_models is not null)
 {
     <MudContainer MaxWidth="MaxWidth.Large">
+        <MudText Class="my-3" Align=Align.Center Typo="Typo.h4">All logs grouped by date</MudText>
+        <MudDivider />
         <MudStack Spacing="3">
             <MudExpansionPanels MultiExpansion="false">
                 @foreach (DateTime uniqueDate in _datesDict.Keys)
@@ -49,7 +51,6 @@
     {
         _models = await LogsRepo.GetAllLogsAsync();
         _viewModels = await LogsMapper.MapToViewModelList(_models);
-        // _datesDict = CreateLogsByDatesDict(_viewModels);
         _datesDict = LogAnalyzer.GetLogsByUniqueDates(_viewModels);
     }
 
@@ -70,14 +71,5 @@
             }
         }
         return outputDict;
-    }
-
-    private async Task DeleteLog(long modelToDeleteId)
-    {
-        DistractionLogModel modelToDelete = _models.First(x => x.ID == modelToDeleteId);
-        DistractionLogViewModel viewModelToRemove = _viewModels.First(x => x.Id == modelToDeleteId);
-        await LogsRepo.DeleteLogAsync(modelToDelete);
-        _models.Remove(modelToDelete);
-        _viewModels.Remove(viewModelToRemove);
     }
 }
