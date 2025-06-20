@@ -15,6 +15,10 @@
                 <DistractionLogCard model="@viewModel" OnDelete="@DeleteLog" ShouldHaveDelete/>
             }
         }
+        @if (_models.Count == 0)
+        {
+            <MudText>There are no logs added today</MudText>
+        }
     </MudStack>
 </MudContainer>
 

@@ -4,15 +4,15 @@ namespace Distraction_Logger_PWA.Data.Tags
 {
     public class TagAnalyzer
     {
-        public static DistractionTagViewModel GetMostFrequentTag(List<DistractionLogViewModel> logViewModels)
-        {
-            Dictionary<string, TagWithFrequency> tagFrequencyDict = GetTagsCount(logViewModels);
-            DistractionTagViewModel mostFrequentTag = tagFrequencyDict.Values
-                .OrderByDescending(x => x.Frequency)
-                .First()
-                .TagViewModel;
-            return mostFrequentTag;
-        }
+        //public static DistractionTagViewModel GetMostFrequentTag(List<DistractionLogViewModel> logViewModels)
+        //{
+        //    Dictionary<string, TagWithFrequency> tagFrequencyDict = GetTagsCount(logViewModels);
+        //    DistractionTagViewModel mostFrequentTag = tagFrequencyDict.Values
+        //        .OrderByDescending(x => x.Frequency)
+        //        .First()
+        //        .TagViewModel;
+        //    return mostFrequentTag;
+        //}
 
         public static Dictionary<string, TagWithFrequency> GetTagsCount(List<DistractionLogViewModel> logViewModels)
         {
@@ -36,6 +36,7 @@ namespace Distraction_Logger_PWA.Data.Tags
                     }
                 }
             }
+            var orderedTagsCount = tagFrequencyDict.OrderDescending();
             return tagFrequencyDict;
         }
     }
