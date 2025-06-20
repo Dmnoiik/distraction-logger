@@ -23,5 +23,6 @@ namespace Distraction_Logger_PWA.Data.LogsData
             }
             return outputDict;
         }
+
     }
 }

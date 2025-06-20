@@ -1,0 +1,60 @@
+﻿<MudChart ChartType="ChartType.Bar" XAxisLabels="GetXAxisLabels()" ChartSeries="GenerateChartSeries()" Width="100%" ChartOptions="_chartOptions" AxisChartOptions="_axisChartOptions"/>
+
+@code {
+    [Parameter]
+    public List<DistractionLogViewModel> Models { get; set; }
+
+    [Parameter]
+    public int DateRangeDays { get; set; }
+
+    private readonly ChartOptions _chartOptions = new();
+    private readonly AxisChartOptions _axisChartOptions = new();
+
+    protected override void OnInitialized()
+    {
+        _chartOptions.YAxisTicks = 1;
+        _axisChartOptions.MatchBoundsToSize = true;
+    }
+
+    private List<ChartSeries> GenerateChartSeries()
+    {
+        var morningLogs = GetMorningLogs();
+
+        var afternoonLogs = GetAfternoonLogs();
+
+        List<ChartSeries> chartSeries = new()
+        {
+            new ChartSeries
+            {
+                Name="Before 12:00",
+                Data = new[] {0, (double)morningLogs.Count, 0}
+            },
+            new ChartSeries
+            {
+                Name="After 12:00",
+                Data = new[] {0, (double)afternoonLogs.Count, 0}
+            }
+        };
+
+        return chartSeries;
+    }
+
+    private List<DistractionLogViewModel> GetMorningLogs()
+    {
+        return Models
+        .Where(log => log.DateOfCreation.Hour < 12)
+        .ToList();
+    }
+
+    private List<DistractionLogViewModel> GetAfternoonLogs()
+    {
+        return Models
+        .Where(log => log.DateOfCreation.Hour >= 12)
+        .ToList();
+    }
+
+    private string[] GetXAxisLabels()
+    {
+        return new[] {"", $"From last {DateRangeDays} days" };
+    }
+}

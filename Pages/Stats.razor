@@ -4,15 +4,14 @@
 @inject DistractionLogMapper LogsMapper
 @inject DistractionTagMapper TagsMapper
 
-<MudText Typo="Typo.h1">Statistics</MudText>
+<MudText Typo="Typo.h3">Statistics</MudText>
 <MudContainer MaxWidth="MaxWidth.Large">
 
     <MudGrid>
         <MudItem xs="12">
             <MudPaper>
-                <MudSelect 
-                @bind-Value="_lastXDays"
-                Label="Logs from">
+                <MudSelect @bind-Value="_lastXDays"
+                           Label="Logs from">
                     <MudSelectItem Value="3">Last 3 days</MudSelectItem>
                     <MudSelectItem Value="7">Last 7 days</MudSelectItem>
                     <MudSelectItem Value="30">Last 30 days</MudSelectItem>
@@ -22,7 +21,7 @@
         </MudItem>
         <MudItem xs="6">
             <MudPaper>
-                <DistractionMostFrequentTags Tags="_mostFrequentTags"/>
+                <DistractionMostFrequentTags Tags="_mostFrequentTags" />
                 <MudDivider />
                 <ul class="tags-count">
                     @foreach (TagWithFrequency tagFrequency in _tagsFrequency)
@@ -34,12 +33,13 @@
         </MudItem>
         <MudItem xs="6">
             <MudPaper>
-                <DistractionLogsPerDay LogsPerDate="_logsByUniqueDates"/>
+                <DistractionLogsTimeComparison Models="_viewModels" DateRangeDays="_lastXDays" />
             </MudPaper>
         </MudItem>
-        <MudItem xs="6">
-        </MudItem>
-        <MudItem xs="6">
+        <MudItem xs="12">
+            <MudPaper >
+                <DistractionLogsPerDay LogsPerDate="_logsByUniqueDates" />
+            </MudPaper>
         </MudItem>
     </MudGrid>
 </MudContainer>
@@ -70,30 +70,4 @@
         _mostFrequentTags = TagAnalyzer.GetTopFrequentTags(_tagsFrequency);
         _logsByUniqueDates = LogAnalyzer.GetLogsByUniqueDates(_viewModels);
     }
-
-    // private string[] GetXAxisLabels(List<DistractionLogViewModel> models)
-    // {
-    //     var uniqueDates = _logsByUniqueDates.Keys;
-    //     return uniqueDates
-    //     .Select(date => date.ToShortDateString())
-    //     .ToArray();
-    // }
-
-    // private List<ChartSeries> GetSeriesForChart(Dictionary<DateTime, List<DistractionLogViewModel>> logsByDate)
-    // {
-    //     List<ChartSeries> logsPerDaySeries = new();
-
-    //     ChartSeries logsPerDay = new();
-    //     logsPerDay.Name = "Logs per day";
-
-    //     List<double> numOfLogsPerDay = new();
-
-    //     foreach(var (uniqueDate, viewModels) in logsByDate)
-    //     {
-    //         numOfLogsPerDay.Add(viewModels.Count);
-    //     }
-    //     logsPerDay.Data = numOfLogsPerDay.ToArray();
-    //     logsPerDaySeries.Add(logsPerDay);
-    //     return logsPerDaySeries;
-    // }
 }
